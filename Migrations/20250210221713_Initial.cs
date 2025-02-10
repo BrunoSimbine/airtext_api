@@ -15,11 +15,18 @@ namespace airtext_api.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Accounts",
+                name: "Company",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Balance = table.Column<double>(type: "double", nullable: false),
+                    VAT = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Address = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Email = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DateCreated = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -27,7 +34,7 @@ namespace airtext_api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Accounts", x => x.Id);
+                    table.PrimaryKey("PK_Company", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -57,10 +64,14 @@ namespace airtext_api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    AccountId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    CanRead = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CompanyId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CanSpendBalance = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CanAddBalance = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CanAddUser = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CanDeleteUser = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CanRemoveUser = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CanChangeRole = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DateDeleted = table.Column<DateTime>(type: "datetime(6)", nullable: true)
@@ -69,9 +80,9 @@ namespace airtext_api.Migrations
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Roles_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
+                        name: "FK_Roles_Company_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Company",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -140,7 +151,7 @@ namespace airtext_api.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "UserAccounts",
+                name: "Contracts",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -152,15 +163,15 @@ namespace airtext_api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserAccounts", x => x.Id);
+                    table.PrimaryKey("PK_Contracts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserAccounts_Roles_RoleId",
+                        name: "FK_Contracts_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserAccounts_Users_UserId",
+                        name: "FK_Contracts_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -174,19 +185,19 @@ namespace airtext_api.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roles_AccountId",
-                table: "Roles",
-                column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserAccounts_RoleId",
-                table: "UserAccounts",
+                name: "IX_Contracts_RoleId",
+                table: "Contracts",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserAccounts_UserId",
-                table: "UserAccounts",
+                name: "IX_Contracts_UserId",
+                table: "Contracts",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Roles_CompanyId",
+                table: "Roles",
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_CountryId",
@@ -201,7 +212,7 @@ namespace airtext_api.Migrations
                 name: "Auth");
 
             migrationBuilder.DropTable(
-                name: "UserAccounts");
+                name: "Contracts");
 
             migrationBuilder.DropTable(
                 name: "Roles");
@@ -210,7 +221,7 @@ namespace airtext_api.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Accounts");
+                name: "Company");
 
             migrationBuilder.DropTable(
                 name: "Countries");

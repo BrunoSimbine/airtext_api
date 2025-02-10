@@ -8,13 +8,21 @@ using Swashbuckle.AspNetCore.Filters;
 using airtext_api.Data;
 using airtext_api.Filters;
 using airtext_api.Models;
+
 using airtext_api.Repository.UserRepository;
 using airtext_api.Repository.AuthRepository;
 using airtext_api.Repository.CountryRepository;
+using airtext_api.Repository.CompanyRepository;
+using airtext_api.Repository.RoleRepository;
+using airtext_api.Repository.ContractRepository;
+
 
 using airtext_api.Service.UserService;
 using airtext_api.Service.AuthService;
 using airtext_api.Service.CountryService;
+using airtext_api.Service.CompanyService;
+using airtext_api.Service.RoleService;
+using airtext_api.Service.ContractService;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -69,13 +77,23 @@ builder.WebHost.ConfigureKestrel(options =>
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<DataContext>();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IContractRepository, ContractRepository>();
+
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICountryService, CountryService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IContractService, ContractService>();
+
+
 
 builder.Services.AddScoped<RequireActiveAuthFilter>();
 

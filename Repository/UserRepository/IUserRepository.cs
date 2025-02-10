@@ -12,6 +12,7 @@ namespace airtext_api.Repository.UserRepository;
 public interface IUserRepository : IBaseRepository<User>
 {
 	Guid GetId();
+	Task<User> GetAsync();
 	Task<bool> UserExists(Guid id);
 	Task<bool> IsActivated(Guid Id);
 	Task<bool> PhoneExists(string phone);
@@ -19,7 +20,8 @@ public interface IUserRepository : IBaseRepository<User>
 	Task<bool> NameExists(string username);
 
 	Task<User> ActivateAsync(Guid Token);
-
+	Task<List<User>> GetAllAsync();
+	
 	Task<User> GetByPhone(string phone);
 
 }

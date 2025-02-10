@@ -17,8 +17,8 @@ public class DataContext : DbContext
 	public DbSet<Country> Countries { get; set; }
 	public DbSet<User> Users { get; set; }
 	public DbSet<Auth> Auth { get; set; }
-	public DbSet<Account> Accounts { get; set; }
+	public DbSet<Company> Company { get; set; }
 	public DbSet<Role> Roles { get; set; }
-	public DbSet<UserAccount> UserAccounts { get; set; }
+	public DbSet<Contract> Contracts { get; set; }
 
 } 

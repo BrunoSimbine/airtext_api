@@ -12,6 +12,9 @@ using airtext_api.Dtos;
 using airtext_api.Repository.UserRepository;
 using airtext_api.Repository.AuthRepository;
 using airtext_api.Repository.CountryRepository;
+using airtext_api.Repository.ContractRepository;
+using airtext_api.Repository.RoleRepository;
+using airtext_api.Repository.CompanyRepository;
 
 
 namespace airtext_api.Service.UserService;
@@ -21,12 +24,19 @@ public class UserService : IUserService
 	private readonly IUserRepository _userRepository;
 	private readonly IAuthRepository _authRepository;
 	private readonly ICountryRepository _countryRepository;
+	private readonly IContractRepository _contractRepository;
+	private readonly IRoleRepository _roleRepository;
+	private readonly ICompanyRepository _companyRepository;
 
-	public UserService(IUserRepository userRpository, IAuthRepository authRepository, ICountryRepository countryRepository)
+
+	public UserService(IUserRepository userRepository, IAuthRepository authRepository, ICountryRepository countryRepository, IContractRepository contractRepository, IRoleRepository roleRepository, ICompanyRepository companyRepository)
 	{
 		_countryRepository = countryRepository;
 		_authRepository = authRepository;
-		_userRepository = userRpository;
+		_userRepository = userRepository;
+		_contractRepository = contractRepository;
+		_roleRepository = roleRepository;
+		_companyRepository = companyRepository;
 	}
 
 	public async Task<User> AddAsync(UserDto userDto) 
@@ -78,6 +88,26 @@ public class UserService : IUserService
 			var user = await _userRepository.GetAsync(Id);
 			return user;
 		}
+	}
+
+	public async Task<List<User>> GetAllAsync() 
+	{
+		return await _userRepository.GetAllAsync();
+	}
+
+	public async Task<List<Company>> GetCompanyAsync() 
+	{
+		var companies = new List<Company>();
+		var id = _userRepository.GetId();
+		var contracts = await _contractRepository.GetByUserAsync(id);
+		foreach (var contract in contracts)
+		{
+			var role = await _roleRepository.GetAsync(contract.RoleId);
+			var company = await _companyRepository.GetAsync(role.CompanyId);
+			companies.Add(company);
+		}
+
+		return companies;
 	}
 
 	public async Task<User> ActivateAsync(Guid id) 

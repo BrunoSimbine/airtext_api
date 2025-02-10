@@ -1,11 +1,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-namespace airtext_api.Models;
+namespace airtext_api.Dtos;
 
-public class Role : BaseEntity
+public class RoleDto
 {
-	[JsonIgnore]
-	public Company Company { get; set; }
     public Guid CompanyId { get; set; }
 
 	public string Name { get; set; }

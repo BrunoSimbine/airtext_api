@@ -11,7 +11,7 @@ using airtext_api.Data;
 namespace airtext_api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250210130208_Initial")]
+    [Migration("20250210221713_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -21,30 +21,6 @@ namespace airtext_api.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("airtext_api.Models.Account", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DateUpdated")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Accounts");
-                });
 
             modelBuilder.Entity("airtext_api.Models.Auth", b =>
                 {
@@ -86,6 +62,75 @@ namespace airtext_api.Migrations
                     b.ToTable("Auth");
                 });
 
+            modelBuilder.Entity("airtext_api.Models.Company", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<double>("Balance")
+                        .HasColumnType("double");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("VAT")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Company");
+                });
+
+            modelBuilder.Entity("airtext_api.Models.Contract", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Contracts");
+                });
+
             modelBuilder.Entity("airtext_api.Models.Country", b =>
                 {
                     b.Property<Guid>("Id")
@@ -124,17 +169,23 @@ namespace airtext_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("char(36)");
+                    b.Property<bool>("CanAddBalance")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("CanAddUser")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<bool>("CanDeleteUser")
+                    b.Property<bool>("CanChangeRole")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<bool>("CanRead")
+                    b.Property<bool>("CanRemoveUser")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("CanSpendBalance")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime(6)");
@@ -145,9 +196,13 @@ namespace airtext_api.Migrations
                     b.Property<DateTime>("DateUpdated")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("CompanyId");
 
                     b.ToTable("Roles");
                 });
@@ -204,36 +259,6 @@ namespace airtext_api.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("airtext_api.Models.UserAccount", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DateUpdated")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserAccounts");
-                });
-
             modelBuilder.Entity("airtext_api.Models.Auth", b =>
                 {
                     b.HasOne("airtext_api.Models.User", "User")
@@ -245,29 +270,7 @@ namespace airtext_api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("airtext_api.Models.Role", b =>
-                {
-                    b.HasOne("airtext_api.Models.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-                });
-
-            modelBuilder.Entity("airtext_api.Models.User", b =>
-                {
-                    b.HasOne("airtext_api.Models.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
-                });
-
-            modelBuilder.Entity("airtext_api.Models.UserAccount", b =>
+            modelBuilder.Entity("airtext_api.Models.Contract", b =>
                 {
                     b.HasOne("airtext_api.Models.Role", "Role")
                         .WithMany()
@@ -284,6 +287,28 @@ namespace airtext_api.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("airtext_api.Models.Role", b =>
+                {
+                    b.HasOne("airtext_api.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("airtext_api.Models.User", b =>
+                {
+                    b.HasOne("airtext_api.Models.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
                 });
 #pragma warning restore 612, 618
         }

@@ -22,10 +22,16 @@ public class UserRepository : IUserRepository
 		_context = context;
 	}
 
-	  public Guid GetId()
+	 public Guid GetId()
     {
         var id = _accessor.HttpContext?.User.FindFirstValue(ClaimTypes.Sid);
         return Guid.Parse(id);
+    }
+
+    public async Task<User> GetAsync()
+    {
+    	var id = GetId();
+        return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
     }
 
 	public async Task<User> AddAsync(User user) 
@@ -81,7 +87,7 @@ public class UserRepository : IUserRepository
 		return user;
 	}
 
-	    public async Task<List<User>> GetActives()
+	public async Task<List<User>> GetAllAsync()
     {
         var users = await _context.Users.Where(a => a.DateDeleted == null).ToListAsync();
         return users;

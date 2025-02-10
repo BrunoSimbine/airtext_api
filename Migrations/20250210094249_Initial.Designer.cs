@@ -11,8 +11,8 @@ using airtext_api.Data;
 namespace airtext_api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250209083045_UYSFUYF")]
-    partial class UYSFUYF
+    [Migration("20250210094249_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,6 +44,46 @@ namespace airtext_api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("airtext_api.Models.Auth", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Device")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("IpAddress")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("LastActivity")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Auth");
                 });
 
             modelBuilder.Entity("airtext_api.Models.Role", b =>
@@ -128,12 +168,9 @@ namespace airtext_api.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Username")
-                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -166,6 +203,17 @@ namespace airtext_api.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserAccounts");
+                });
+
+            modelBuilder.Entity("airtext_api.Models.Auth", b =>
+                {
+                    b.HasOne("airtext_api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("airtext_api.Models.Role", b =>

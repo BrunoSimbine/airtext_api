@@ -11,7 +11,7 @@ using airtext_api.Data;
 namespace airtext_api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250210094249_Initial")]
+    [Migration("20250210130208_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -86,6 +86,38 @@ namespace airtext_api.Migrations
                     b.ToTable("Auth");
                 });
 
+            modelBuilder.Entity("airtext_api.Models.Country", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("DDI")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Countries");
+                });
+
             modelBuilder.Entity("airtext_api.Models.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -126,13 +158,8 @@ namespace airtext_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("DDI")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<Guid>("CountryId")
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime(6)");
@@ -171,6 +198,8 @@ namespace airtext_api.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
 
                     b.ToTable("Users");
                 });
@@ -225,6 +254,17 @@ namespace airtext_api.Migrations
                         .IsRequired();
 
                     b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("airtext_api.Models.User", b =>
+                {
+                    b.HasOne("airtext_api.Models.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("airtext_api.Models.UserAccount", b =>

@@ -1,9 +1,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace airtext_api.Models;
+namespace airtext_api.Dtos;
 
-public class Country : BaseEntity
+public class CountryDto
 {
     public string Name { get; set; }
     public string Code { get; set; }

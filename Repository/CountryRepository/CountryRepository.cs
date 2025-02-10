@@ -21,11 +21,40 @@ public class CountryRepository : ICountryRepository
 
 	public async Task<Country> AddAsync(Country country)
 	{
-		return new Country();
+		_context.Countries.Add(country);
+		await _context.SaveChangesAsync();
+		return country;
 	}
 
 	public async Task<Country> GetAsync(Guid id)
 	{
-		return new Country();
+		var user = await _context.Countries.FirstOrDefaultAsync(x => x.Id == id);
+		return user;
+	}
+
+	public async Task<bool> AnyAsync(Guid id)
+	{
+		return await _context.Countries.AnyAsync(x => x.Id == id);
+	}
+
+	public async Task<List<Country>> GetAllAsync()
+	{
+		var countries = await _context.Countries.Where(x => x.DateDeleted == null).ToListAsync();
+		return countries;
+	}
+
+	public async Task<bool> NameExists(string name)
+	{
+		return await _context.Countries.AnyAsync(x => x.Name == name);
+	}
+
+	public async Task<bool> CodeExists(string code)
+	{
+		return await _context.Countries.AnyAsync(x => x.Code == code);
+	}
+
+	public async Task<bool> DDIExists(string ddi)
+	{
+		return await _context.Countries.AnyAsync(x => x.DDI == ddi);
 	}
 }

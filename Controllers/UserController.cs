@@ -4,7 +4,6 @@ using airtext_api.Dtos;
 using airtext_api.Exceptions;
 using airtext_api.Service.UserService;
 
-
 namespace airtext_api.Controllers;
 
 [ApiController]
@@ -25,7 +24,7 @@ public class UserController : ControllerBase
         {
             var user = await _userService.AddAsync(userDto);
             return Ok(user);
-        }catch (UsernameExistsException ex)
+        }catch (NameExistsException ex)
         {
             return BadRequest(new Error { Type = "Username already taken.", Solution = "Insert other username."});
         }catch (PhoneExistsException ex)
@@ -35,6 +34,9 @@ public class UserController : ControllerBase
         }catch (EmailExistsException ex)
         {
             return BadRequest(new Error { Type = "Email already taken.", Solution = "Insert other email."});
+        }catch (NotFoundException ex)
+        {
+            return BadRequest(new Error { Type = "Country already taken.", Solution = "Insert other country."});
         }
 
     }
@@ -46,7 +48,7 @@ public class UserController : ControllerBase
         {
             var user = await _userService.ActivateAsync(Token);
             return Ok(user);
-        } catch (UserNotFoundException ex)
+        } catch (NotFoundException ex)
         {
             return BadRequest(new Error { Type = "User not found.", Solution = "Insert correct validation token"});
         } catch (UserAlreadyActiveException ex)

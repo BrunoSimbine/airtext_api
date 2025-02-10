@@ -10,9 +10,12 @@ using airtext_api.Filters;
 using airtext_api.Models;
 using airtext_api.Repository.UserRepository;
 using airtext_api.Repository.AuthRepository;
+using airtext_api.Repository.CountryRepository;
 
 using airtext_api.Service.UserService;
 using airtext_api.Service.AuthService;
+using airtext_api.Service.CountryService;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,9 +71,11 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICountryService, CountryService>();
 
 builder.Services.AddScoped<RequireActiveAuthFilter>();
 

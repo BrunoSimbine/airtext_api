@@ -1,0 +1,14 @@
+services:
+  airtext_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - airtext_api_network
+
+networks:
+  airtext_api_network:
+    driver: bridge
+      

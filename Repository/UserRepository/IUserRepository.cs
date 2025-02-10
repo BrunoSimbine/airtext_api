@@ -1,0 +1,25 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Text;
+
+using airtext_api.Models;
+
+namespace airtext_api.Repository.UserRepository;
+
+public interface IUserRepository : IBaseRepository<User>
+{
+	Guid GetId();
+	Task<bool> UserExists(Guid id);
+	Task<bool> IsActivated(Guid Id);
+	Task<bool> PhoneExists(string phone);
+	Task<bool> EmailExists(string email);
+	Task<bool> NameExists(string username);
+
+	Task<User> ActivateAsync(Guid Token);
+
+	Task<User> GetByPhone(string phone);
+
+}

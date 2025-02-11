@@ -90,6 +90,14 @@ public class UserService : IUserService
 		}
 	}
 
+	public async Task<User> GetAsync() 
+	{
+
+			var user = await _userRepository.GetAsync();
+			return user;
+		
+	}
+
 	public async Task<List<User>> GetAllAsync() 
 	{
 		return await _userRepository.GetAllAsync();

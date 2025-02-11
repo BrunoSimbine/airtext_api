@@ -14,6 +14,7 @@ public interface IUserService
 {
 	Task<User> AddAsync(UserDto userDto);
 	Task<User> GetAsync(Guid Id);
+	Task<User> GetAsync();
 	Task<User> ActivateAsync(Guid Token);
 	Task<List<User>> GetAllAsync();
 	Task<List<Company>> GetCompanyAsync();

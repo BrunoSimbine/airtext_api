@@ -18,6 +18,22 @@ public class UserController : ControllerBase
     	_userService = userService;
     }
 
+    [HttpGet("get"), Authorize]
+    public async Task<ActionResult<List<User>>> GetAsync()
+    {
+        var user = await _userService.GetAsync();
+        return Ok(user);
+    }
+
+
+    [HttpGet("get/{Id}"), Authorize]
+    public async Task<ActionResult<List<User>>> GetAllAsync(Guid Id)
+    {
+        var user = await _userService.GetAsync(Id);
+        return Ok(user);
+    }
+
+
     [HttpGet("get/all"), Authorize]
     public async Task<ActionResult<List<User>>> GetAllAsync()
     {

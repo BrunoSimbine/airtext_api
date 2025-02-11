@@ -52,9 +52,9 @@ public class UserRepository : IUserRepository
 		return await _context.Users.AnyAsync(x => x.Id == id);
 	}
 
-	public async Task<bool> NameExists(string username) 
+	public async Task<bool> NameExists(string name) 
 	{
-		return await _context.Users.AnyAsync(x => x.Username == username);
+		return await _context.Users.AnyAsync(x => x.Name == name);
 	}
 
 	public async Task<bool> EmailExists(string email) 
@@ -65,6 +65,11 @@ public class UserRepository : IUserRepository
 	public async Task<bool> PhoneExists(string phone) 
 	{
 		return await _context.Users.AnyAsync(x => x.Phone == phone);
+	}
+
+	public async Task<bool> UsernameExists(string username) 
+	{
+		return await _context.Users.AnyAsync(x => x.Username == username);
 	}
 
 	public async Task<bool> IsActivated(Guid Id) 
@@ -106,16 +111,16 @@ public class UserRepository : IUserRepository
         return user;
     }
 
+    public async Task<User> GetByUsername(string username)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        return user;
+    }
+
     public async Task<List<User>> GetAll()
     {
         var users = await _context.Users.ToListAsync();
         return users;
-    }
-
-    public async Task<bool> ExistsAnyEmail(string email)
-    {
-        var exists = await _context.Users.AnyAsync(u => u.Email == email);
-        return exists;
     }
 
 

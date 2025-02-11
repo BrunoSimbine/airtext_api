@@ -60,6 +60,7 @@ public class UserService : IUserService
 			if (await _countryRepository.AnyAsync(userDto.CountryId))
 			{
 				var user = new User { 
+					Name = userDto.Name,
 					Username = userDto.Username,
 					Email = userDto.Email, 
 					Phone = userDto.Phone, 

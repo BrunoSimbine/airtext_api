@@ -17,11 +17,15 @@ public interface IUserRepository : IBaseRepository<User>
 	Task<bool> IsActivated(Guid Id);
 	Task<bool> PhoneExists(string phone);
 	Task<bool> EmailExists(string email);
-	Task<bool> NameExists(string username);
+	Task<bool> NameExists(string name);
+	Task<bool> UsernameExists(string username);
 
 	Task<User> ActivateAsync(Guid Token);
 	Task<List<User>> GetAllAsync();
 	
 	Task<User> GetByPhone(string phone);
+	Task<User> GetByEmail(string email);
+	Task<User> GetByUsername(string email);
+
 
 }
